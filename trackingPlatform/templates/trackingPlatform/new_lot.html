@@ -1,0 +1,45 @@
+{% extends 'trackingPlatform/base.html' %}
+
+{% block content %}
+    <div class="wrapper fadeInDown">
+        <div style="max-width: 700px" id="formContent">
+            <div class="container">
+                <form method="POST">
+                    {% csrf_token %}
+                <div class="tab row">
+                    <div class="col-12">
+                    <h4 style="text-align:center;font-weight:bold">Create new Lot</h4>
+                    </div>
+
+                    <div class="col-6">
+                        <input type="text" class="form-control"
+                               id="product_name" name="product_name"
+                               placeholder="Insert product name...">
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control"
+                               id="track_code" name="track_code"
+                               placeholder="insert tracking code (8 digit)...">
+                    </div>
+
+                    <div class="col-12">
+                        <textarea class="form-control" id="description"
+                                  name="description"
+                                  placeholder="insert description..."></textarea>
+                    </div>
+                 </div>
+                    <div class="row justify-content-end">
+                    <div class="col-2">
+                        <a href="{% url 'new_lot' %}">
+                        <button class="btn btn-primary" type="submit" >Save</button>
+                            </a>
+                    </div>
+                    </div>
+                    </form>
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

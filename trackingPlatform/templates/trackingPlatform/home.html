@@ -1,0 +1,54 @@
+{% extends 'trackingPlatform/base.html' %}
+
+{% block content %}
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Lot</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Tracking Code</th>
+      <th scope="col">Created At</th>
+      <th scope="col">Details</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for lot in lots %}
+    <tr>
+      <th scope="row">{{lot.pk}}</th>
+      <td class="field">{{lot.product_name}}</td>
+      <td class="field">{{lot.track_code}}</td>
+      <td class="field">{{lot.created_at}}</td>
+      <td class="field"><a href="{% url 'lot_details' pk=lot.pk %}" class="top-menu">
+            {% include './icons/search.svg' %}
+        </a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<!--<nav aria-label="Page navigation example">-->
+<!--  <ul class="pagination">-->
+<!--    <li class="page-item"><a class="page-link" href="#">Previous</a></li>-->
+<!--    <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--    <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--    <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--    <li class="page-item"><a class="page-link" href="#">Next</a></li>-->
+<!--  </ul>-->
+<!--</nav>-->
+<div class="pagination">
+ <span class="step-links">
+   {% if lots.has_previous %}
+     <a href="?page={{ lots.previous_page_number }}">Previous</a>
+   {% endif %}
+   <span class="current">
+     Page {{ lots.number }} of {{ lots.paginator.num_pages }}.
+   </span>
+     {% if lots.has_next %}
+       <a href="?page={{ lots.next_page_number }}">Next</a>
+     {% endif %}
+ </span>
+</div>
+
+{% endblock %}
