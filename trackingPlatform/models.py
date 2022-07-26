@@ -3,7 +3,7 @@ import hashlib
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from .wallet import *
+from wallet import *
 
 
 class Lot(models.Model):
