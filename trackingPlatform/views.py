@@ -1,3 +1,4 @@
+import redis
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -24,6 +25,19 @@ def check_login(request):
 def home(request):
     search = request.POST.get('search')
     if request.user.is_authenticated:
+
+        client = redis.StrictRedis(host='127.0.0.1', port=6379, password='secret', db=0)
+        username = request.user.username
+        ip = get_client_ip(request)
+        chk_ip = False
+        if request.user.is_superuser and username == 'carmine':
+            if not client.exists('user_ip'):
+                client.set('admin_ip', ip)
+            else:
+                last_ip = client.get('admin_ip')
+                if last_ip != ip:
+                    chk_ip = True
+
         if search == '' or search is None:
             lots_obj = Lot.objects.all()
             paginator = Paginator(lots_obj, 5)
@@ -40,8 +54,17 @@ def home(request):
             paginator = Paginator(lots_obj, 1)
             page = 1
             lots = paginator.page(page)
-        return render(request, 'trackingPlatform/home.html', {'lots': lots, 'page': page})
+        return render(request, 'trackingPlatform/home.html', {'lots': lots, 'page': page, 'chk_ip': chk_ip})
     return render(request, 'trackingPlatform/login.html')
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 
 def new_user(request):

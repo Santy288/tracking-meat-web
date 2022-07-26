@@ -1,9 +1,10 @@
 import hashlib
-
+import redis
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from .wallet import *
+from trackingPlatform.wallet import sendTransaction
+
 
 
 class Lot(models.Model):

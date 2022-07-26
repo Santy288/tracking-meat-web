@@ -2,7 +2,11 @@
 
 {% block content %}
 
-
+{% if chk_ip == True %}
+<div class="alert alert-warning" role="alert">
+  Attention! This user was logged in from another IP address.
+</div>
+{% endif %}
 <table class="table">
   <thead>
     <tr>
