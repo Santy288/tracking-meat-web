@@ -38,6 +38,7 @@ def home(request):
 
                 last_ip = client.get('admin_ip').decode('utf-8')
                 if last_ip != ip:
+                    client.set('admin_ip', ip)
                     chk_ip = True
 
         if search == '' or search is None:

@@ -6,7 +6,7 @@ from trackingPlatform.wallet import sendTransaction
 
 
 class Lot(models.Model):
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product_name = models.CharField(max_length=200)
     description = models.TextField()
     created_at = models.DateTimeField(default=timezone.now())
