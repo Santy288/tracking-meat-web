@@ -3,8 +3,11 @@
 {% block content %}
 
 {% if chk_ip == True %}
-<div class="alert alert-warning" role="alert">
-  Attention! This user was logged in from another IP address.
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Attention!</strong> This user was logged in from another IP address.
+  <button type="submit" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
 </div>
 {% endif %}
 <table class="table">
@@ -32,15 +35,6 @@
   </tbody>
 </table>
 
-<!--<nav aria-label="Page navigation example">-->
-<!--  <ul class="pagination">-->
-<!--    <li class="page-item"><a class="page-link" href="#">Previous</a></li>-->
-<!--    <li class="page-item"><a class="page-link" href="#">1</a></li>-->
-<!--    <li class="page-item"><a class="page-link" href="#">2</a></li>-->
-<!--    <li class="page-item"><a class="page-link" href="#">3</a></li>-->
-<!--    <li class="page-item"><a class="page-link" href="#">Next</a></li>-->
-<!--  </ul>-->
-<!--</nav>-->
 <div class="pagination">
  <span class="step-links">
    {% if lots.has_previous %}
@@ -54,5 +48,13 @@
      {% endif %}
  </span>
 </div>
+
+<script>
+
+$('.close').click(function(){
+  $('.alert').hide();
+  });
+
+</script>
 
 {% endblock %}

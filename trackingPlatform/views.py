@@ -1,6 +1,6 @@
 import redis
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Lot
 from django.contrib.auth.models import User
@@ -19,6 +19,7 @@ def check_login(request):
             login(request, chk_user)
             return redirect('home')
     else:
+        logout(request)
         return render(request, 'trackingPlatform/login.html')
 
 
@@ -31,10 +32,11 @@ def home(request):
         ip = get_client_ip(request)
         chk_ip = False
         if request.user.is_superuser and username == 'carmine':
-            if not client.exists('user_ip'):
+            if not client.exists('admin_ip'):
                 client.set('admin_ip', ip)
             else:
-                last_ip = client.get('admin_ip')
+
+                last_ip = client.get('admin_ip').decode('utf-8')
                 if last_ip != ip:
                     chk_ip = True
 
@@ -55,7 +57,7 @@ def home(request):
             page = 1
             lots = paginator.page(page)
         return render(request, 'trackingPlatform/home.html', {'lots': lots, 'page': page, 'chk_ip': chk_ip})
-    return render(request, 'trackingPlatform/login.html')
+    return redirect('login')
 
 
 def get_client_ip(request):
@@ -69,28 +71,48 @@ def get_client_ip(request):
 
 def new_user(request):
     if request.method == 'POST':
-        User.objects.create_user(username=request.POST.get('username'),
-                                 email=request.POST.get('email'),
-                                 password=request.POST.get('password'))
+        username = request.POST.get('username')
+        if not User.objects.filter(username=username).exists():
+            User.objects.create_user(username=request.POST.get('username'),
+                                     email=request.POST.get('email'),
+                                     password=request.POST.get('password'))
+        else:
+            messages.success(request, "The username already exists.")
+            return redirect('new_user')
+
         return redirect('login')
     return render(request, 'trackingPlatform/register_user.html')
 
 
 def new_lot(request):
-    if request.method == 'POST':
-        lot = Lot()
-        lot.product_name = request.POST.get('product_name')
-        lot.created_by = request.user
-        lot.description = request.POST.get('description')
-        lot.track_code = request.POST.get('track_code')
-        txId = lot.writeOnChain()
-        lot.txId = txId
-        lot.save()
-        return redirect('home')
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            track_code = request.POST.get('track_code')
+            if Lot.objects.filter(track_code=track_code).exists():
+                messages.success(request, "The tracking code already exists.")
+                return redirect('new_lot')
+            elif len(track_code) != 6 or track_code.isnumeric() is False:
+                messages.success(request, "[tracking code]: Invalid value. Please insert six numbers")
+                return redirect('new_lot')
+            else:
+                lot = Lot()
+                lot.product_name = request.POST.get('product_name')
+                lot.created_by = request.user
+                lot.description = request.POST.get('description')
+                lot.track_code = track_code
+                txId = lot.writeOnChain()
+                lot.txId = txId
+                lot.save()
+                return redirect('home')
 
-    return render(request, 'trackingPlatform/new_lot.html', {})
+        return render(request, 'trackingPlatform/new_lot.html')
+    else:
+        return redirect('login')
 
 
 def lot_details(request, pk):
-    lot = get_object_or_404(Lot, pk=pk)
-    return render(request, 'trackingPlatform/lot_details.html', {'lot': lot})
+    if request.user.is_authenticated:
+        lot = get_object_or_404(Lot, pk=pk)
+        return render(request, 'trackingPlatform/lot_details.html', {'lot': lot})
+    else:
+        return redirect('login')

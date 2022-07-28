@@ -19,7 +19,7 @@
                     <div class="col-6">
                         <input type="text" class="form-control"
                                id="track_code" name="track_code"
-                               placeholder="insert tracking code (8 digit)...">
+                               placeholder="insert tracking code (6 digit)...">
                     </div>
 
                     <div class="col-12">
@@ -36,6 +36,13 @@
                     </div>
                     </div>
                     </form>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <p style="color:red">{{ message }}</p>
+                    {% endfor %}
+                    <br/>
+                {% endif %}
 
             </div>
 

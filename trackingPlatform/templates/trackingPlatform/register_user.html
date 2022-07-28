@@ -32,6 +32,13 @@
 
     </form>
 
+          {% if messages %}
+            {% for message in messages %}
+                <p style="color:red">{{ message }}</p>
+            {% endfor %}
+                    <br/>
+          {% endif %}
+
     </div>
   </div>
 </div>

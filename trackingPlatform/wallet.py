@@ -1,15 +1,6 @@
 from web3 import Web3
 
 
-# def createWallet():
-#     w3 = Web3(Web3.HTTPProvider('https://ropsten.infura.io/v3/922ed38024ab46e3bb7e73785e8bcd7b'))
-#     account = w3.eth.account.create()
-#     privateKey = account.privateKey.hex()
-#     address = account.address
-#
-#     print(f"Your address {address} and your private key {privateKey}")
-
-
 def sendTransaction(message):
     w3 = Web3(Web3.HTTPProvider('https://ropsten.infura.io/v3/922ed38024ab46e3bb7e73785e8bcd7b'))
     address = '0x1E3c334E24ECD257Fd581Dc6F24489b13cff747b'
