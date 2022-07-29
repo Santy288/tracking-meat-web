@@ -31,7 +31,7 @@ def home(request):
         username = request.user.username
         ip = get_client_ip(request)
         chk_ip = False
-        if request.user.is_superuser and username == 'carmine':
+        if request.user.is_superuser and username == 'admin':
             if not client.exists('admin_ip'):
                 client.set('admin_ip', ip)
             else:
