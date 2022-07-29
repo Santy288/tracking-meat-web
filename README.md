@@ -32,5 +32,8 @@ where you can see the transaction made on Ethereum's Ropsten testnet.
 If you are an administrator you can also add a new lot by entering the tracking code.
 Once the lot is entered the transaction will be saved on Ropsten sending the lot code and description in sha256 as a message.
 
+### Links
+This project is deployed on Amazon Web Service at this [URL](http://54.221.91.208/).
+
 
 
