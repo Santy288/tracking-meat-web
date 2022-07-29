@@ -1,8 +1,8 @@
 # Tracking Meat Web
 This project is built with the Django framework and python 3.7.8, the libraries to be installed are:
 + Django 3.2.10
-+ redis
-+ web3
++ Redis
++ Web3
 
 You must have redis-server installed on your machine or it will not work.
 After installing it, you have to set the password 'secret' with the command with redis-cli:
