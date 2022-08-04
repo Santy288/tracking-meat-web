@@ -1,8 +1,10 @@
 # Tracking Meat Web
 This project is built with the Django framework and python 3.7.8, the libraries to be installed are:
 + Django 3.2.10
-+ Redis
-+ Web3
++ Redis 4.3.4
++ Web3 5.30.0
++ celery
++ eventlet
 
 You must have redis-server installed on your machine or it will not work.
 After installing it, you have to set the password 'secret' with the command with redis-cli:
@@ -12,6 +14,12 @@ config set requirepass 'secret'
 
 You can also set a different password, but in this case you have to modify the source code
 in the **view.py** where the connection with Redis is created.
+
+In addition, the project also provides for asynchronous checking of transactions in order to check whether they are actually added.
+It is therefore necessary to start the celery task in the root directory with the command:
+```
+c celery -A trackingWeb  worker -l INFO -P eventlet
+```
 
 ### Login
 It is possible to log in as a basic user or as an administrator:
