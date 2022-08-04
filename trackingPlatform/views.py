@@ -42,21 +42,19 @@ def home(request):
                     chk_ip = True
 
         if search == '' or search is None:
-            lots_obj = Lot.objects.all()
-            paginator = Paginator(lots_obj, 5)
-            page = request.GET.get('page')
-            try:
-                lots = paginator.page(page)
-            except PageNotAnInteger:
-                lots = paginator.page(1)
-            except EmptyPage:
-                lots = paginator.page(paginator.num_pages)
-
+            lots_obj = Lot.objects.all().order_by('-created_at')
         else:
-            lots_obj = Lot.objects.filter(track_code=search)
-            paginator = Paginator(lots_obj, 1)
-            page = 1
+            lots_obj = Lot.objects.filter(track_code=search).order_by('-created_at')
+
+        paginator = Paginator(lots_obj, 5)
+        page = request.GET.get('page')
+        try:
             lots = paginator.page(page)
+        except PageNotAnInteger:
+            lots = paginator.page(1)
+        except EmptyPage:
+            lots = paginator.page(paginator.num_pages)
+
         return render(request, 'trackingPlatform/home.html', {'lots': lots, 'page': page, 'chk_ip': chk_ip})
     return redirect('login')
 
@@ -89,7 +87,7 @@ def new_lot(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             track_code = request.POST.get('track_code')
-            if Lot.objects.filter(track_code=track_code).exists():
+            if Lot.objects.filter(track_code=track_code).exclude(state="FAILED").exists():
                 messages.success(request, "The tracking code already exists.")
                 return redirect('new_lot')
             elif len(track_code) != 6 or track_code.isnumeric() is False:
@@ -101,6 +99,7 @@ def new_lot(request):
                 lot.created_by = request.user
                 lot.description = request.POST.get('description')
                 lot.track_code = track_code
+                lot.state = "PENDING"
                 txId = lot.writeOnChain()
                 lot.txId = txId
                 lot.save()

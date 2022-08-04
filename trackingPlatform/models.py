@@ -9,6 +9,7 @@ class Lot(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product_name = models.CharField(max_length=200)
     description = models.TextField()
+    state = models.CharField(max_length=200, default='PENDING', null=True)
     created_at = models.DateTimeField(default=timezone.now())
     track_code = models.CharField(max_length=6, default=None, null=True)
     txId = models.CharField(max_length=32, default=None, null=True)

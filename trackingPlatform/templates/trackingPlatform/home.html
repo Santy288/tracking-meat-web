@@ -1,7 +1,6 @@
 {% extends 'trackingPlatform/base.html' %}
 
 {% block content %}
-
 {% if chk_ip == True %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
   <strong>Attention!</strong> This user was logged in from another IP address.
@@ -16,6 +15,7 @@
       <th scope="col">Lot</th>
       <th scope="col">Product Name</th>
       <th scope="col">Tracking Code</th>
+      <th scope="col">Transaction State</th>
       <th scope="col">Created At</th>
       <th scope="col">Details</th>
     </tr>
@@ -26,6 +26,7 @@
       <th scope="row">{{lot.pk}}</th>
       <td class="field">{{lot.product_name}}</td>
       <td class="field">{{lot.track_code}}</td>
+      <td class="field">{{lot.state}}</td>
       <td class="field">{{lot.created_at}}</td>
       <td class="field"><a href="{% url 'lot_details' pk=lot.pk %}" class="top-menu">
             {% include './icons/search.svg' %}
@@ -51,9 +52,15 @@
 
 <script>
 
-$('.close').click(function(){
+  setTimeout(function() {
+    location.reload();
+}, 5000);
+
+  $('.close').click(function(){
   $('.alert').hide();
   });
+
+
 
 </script>
 
