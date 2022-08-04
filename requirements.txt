@@ -1,0 +1,5 @@
+Django==3.2.10
+redis==4.3.4
+web3==5.30.0
+celery
+eventlet
