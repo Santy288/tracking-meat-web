@@ -18,7 +18,7 @@ in the **view.py** where the connection with Redis is created.
 In addition, the project also provides for asynchronous checking of transactions in order to check whether they are actually added.
 It is therefore necessary to start the celery task in the root directory with the command:
 ```
-c celery -A trackingWeb  worker -l INFO -P eventlet
+celery -A trackingWeb  worker -l INFO -P eventlet
 ```
 
 ### Login
